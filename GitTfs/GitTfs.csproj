@@ -73,6 +73,9 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LibGit2Sharp">
+      <HintPath>..\packages\LibGit2Sharp.0.9.5\lib\net35\LibGit2Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\NDesk.Options\lib\ndesk-options\NDesk.Options.dll</HintPath>
@@ -223,12 +226,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\lib\libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj">
-      <Project>{EE6ED99F-CB12-4683-B055-D28FC7357A34}</Project>
-      <Name>LibGit2Sharp</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -241,6 +238,11 @@
     <PreBuildEvent>"$(ProjectDir)..\GetCurrentVersion" "$(GitPath)" &gt; "$(ProjectDir)GitVersionInfo"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(SolutionDir)\lib\libgit2sharp\Lib\NativeBinaries\$(PlatformName)\*.*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(SolutionDir)\lib\libgit2sharp\Lib\NativeBinaries\$(PlatformName)\*.*" "$(TargetDir)"
+if not exist "$(TargetDir)NativeBinaries" md "$(TargetDir)NativeBinaries"
+if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86"
+xcopy /s /y "$(SolutionDir)packages\LibGit2Sharp.0.9.5\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
+if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
+xcopy /s /y "$(SolutionDir)packages\LibGit2Sharp.0.9.5\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PostBuildEvent>
   </PropertyGroup>
 </Project>
